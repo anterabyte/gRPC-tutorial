@@ -1,3 +1,30 @@
 syntax = "proto3"; // Which protobuf version to use
 
-package greet // A namespce to avoid conflict
+package greet; // A namespce to avoid conflict
+
+// Where to put the generated go code
+option go_package = "./proto";
+
+// Define a gRPC service
+service Greeter {
+
+  // a Simple RPC
+  rpc SayHello (HelloRequest) returns (HelloResponse) {}
+ 
+}
+
+// Request usng RPC
+message HelloRequest {
+
+  string name = 1;
+  
+}
+
+
+// Response from the server
+message HelloResponse {
+
+  string message = 3;
+
+}
+
