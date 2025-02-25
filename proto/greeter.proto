@@ -1,0 +1,3 @@
+syntax = "proto3"; // Which protobuf version to use
+
+package greet // A namespce to avoid conflict
