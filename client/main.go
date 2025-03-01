@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -11,12 +12,17 @@ import (
 	pb "github.com/anterabyte/gRPC-tutorial/proto"
 )
 
+func init() {
+
+	fmt.Println("Intiating the Connection")
+
+}
 
 func main() {
 
-	conn, err := grpc.Dial("localhost:8080",grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("localhost:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Did not connect to the port, %v",err)
+		log.Fatalf("Did not connect to the port, %v", err)
 	}
 
 	defer conn.Close()

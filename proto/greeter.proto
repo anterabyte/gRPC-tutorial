@@ -15,16 +15,12 @@ service Greeter {
 
 // Request usng RPC
 message HelloRequest {
-
   string name = 1;
-  
 }
 
 
 // Response from the server
 message HelloResponse {
-
   string message = 3;
-
 }
 

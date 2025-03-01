@@ -1,0 +1,76 @@
+// protobuf/protocol-buffer version 3 we are using here
+syntax = "3";
+
+// creating namespace that will avoid conflicts with other .proto files if they have defined some services so we can access those same name services for different purposes
+// Ex
+// Under greet package
+// package greet ; 
+// message hello { string hello = 1};
+
+// Also another package
+// package other;
+// message hello {string hello =  1};
+
+// retrieving hello from proto file could be tedious because there are 2 , If we use package to create namespace we can have greet.hello and other.hello to differentiate between 2 different messages.
+
+// since without a package names are global which could clash
+
+package hello ;
+
+// This line will help protoc to place auto generated code in mentioned file path
+// This go_package is only available for golang for other languages there will be different option
+// In the generated go file the package name will be proto due to placing it in ./proto
+// also ouput file will go to proto directory depends on where will you run protoc command.
+// Why we need this - Go wouldn't know how to structure the generated code, and you'd get errors when trying to import it.
+// If you set option go_package = "github.com/user/proto";, the generated Go files would expect to be in that module path, useful for larger projects.
+option go_package = "./proto" ;
+
+// Structure the code (define the data structure) in proto like struct in Golang
+// message a keyword to define custome data type like struct in golang
+// helloRequest is the identifier
+// string hello = 1 is the field name
+// where string (proto supports multiple types int32 int64 bool float bytes etc.) is the type and hello is the identifier
+// = 1 is the field number (unique identifier for this field can be used for serialization)
+// field number ranges from 1 to 2^29-1 , 1-15 use 1 byte in encoding (more efficient), so use them for frequent fields. Must be unique within a message.
+// This will be what client will be sending to sever to get response. In go it will become
+// type helloRequest struct {
+//     hello string   
+// }
+//
+// A more complex example
+// Ex -
+// message helloRequest {
+//     string hello = 1;
+//     int32 num = 2;
+//     bool field = 3;
+// }
+message helloRequest {
+
+  string hello = 1;
+
+}
+
+// Most of the details are same as above
+// What will server will respond to the request
+// In go this will become;
+// type helloResponse struct {
+//     hello string
+// }
+message helloResponse {
+
+  string say = 1;
+
+}
+
+// Here we will define the service (collection of methods) provide by grpc
+// service Greeter has
+// service keyword to initiate the service creation or keyword for defining an API
+// Greeter is the name of service which will serve the client and server (It will become the Interface identifier in the generated go code)
+// {} inside we will write methods that will provide service to client and server
+// This is the contract between client and serverâwhat methods can be called and what data they exchange.
+service Greeter {
+
+  // keyword for creating new methods
+  rpc SayHello (helloRequest) returns helloResponse ;
+
+}
